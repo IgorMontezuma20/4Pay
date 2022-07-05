@@ -21,6 +21,7 @@ import com.example.appbanco.model.ExtratoModel;
 import com.example.appbanco.model.Notificacao;
 import com.example.appbanco.model.Usuario;
 import com.example.appbanco.view.ChatBot.ChatBot;
+import com.example.appbanco.view.Crypto.Crypto;
 import com.example.appbanco.view.Home.Notificacoes;
 import com.example.appbanco.view.Home.Seguros;
 import com.example.appbanco.view.Pagamentos.Cartoes.CartaoFatura;
@@ -187,6 +188,10 @@ public class HomeFragment extends Fragment {
             Intent it = new Intent(view.getContext(), CartaoFatura.class);
             it.putExtra("cartao", cartaoTres);
             startActivity(it);
+        });
+
+        binding.clCrypto.setOnClickListener(view1 -> {
+            startActivity(new Intent(view.getContext(), Crypto.class));
         });
 
         binding.ivEsconderSaldo.setOnClickListener(view1 -> {

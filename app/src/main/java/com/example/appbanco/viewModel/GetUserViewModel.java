@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.appbanco.help.FirebaseHelper;
 import com.example.appbanco.model.Cartao;
+import com.example.appbanco.model.Endereco;
 import com.example.appbanco.model.ExtratoModel;
 import com.example.appbanco.model.Notificacao;
 import com.example.appbanco.model.Usuario;
@@ -33,7 +34,11 @@ public class GetUserViewModel extends ViewModel {
     private MutableLiveData<Boolean> mGetExtrato = new MutableLiveData<>();
     public LiveData<Boolean> getExtrato = mGetCartao;
 
+    private MutableLiveData<Boolean> mGetEndereco = new MutableLiveData<>();
+    public LiveData<Boolean> getEndereco = mGetEndereco;
+
     private Usuario usuario;
+    private Endereco endereco;
     private List<Notificacao> notiList = new ArrayList<>();
     private List<Cartao> cartoesList = new ArrayList<>();
     private List<ExtratoModel> extratoList = new ArrayList<>();
@@ -60,6 +65,12 @@ public class GetUserViewModel extends ViewModel {
     public void verifyExtrato() {
         if (FirebaseHelper.getAutenticado()) {
             getAllExtratos();
+        }
+    }
+
+    public void verifyEndereco() {
+        if (FirebaseHelper.getAutenticado()) {
+            getAllEndereco();
         }
     }
 
@@ -173,5 +184,27 @@ public class GetUserViewModel extends ViewModel {
         return extratoList;
     }
 
+    private void getAllEndereco(){
+        DatabaseReference enderecoRef = FirebaseHelper.getDatabaseReference()
+                .child("enderecos")
+                .child(FirebaseHelper.getIdFirebase());
+        enderecoRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        endereco = dataSnapshot.getValue(Endereco.class);
+                    }
+                    mGetEndereco.setValue(true);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
 
+    public Endereco getEndereco(){
+        return endereco;
+    }
 }
